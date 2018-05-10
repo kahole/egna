@@ -1,5 +1,9 @@
 # egna
-## Pattern matching for JS
+## Basic pattern matching for JS
+
+```javascript
+const match = require('egna')
+```
 
 Numbers
 ```javascript
@@ -22,7 +26,7 @@ match(car)(
 
     {year: 1985}, ({make}) => `That is an old ${make}`,
 
-    () => "no match"
+    () => "catch all"
 )
 
 // That is an old toyota

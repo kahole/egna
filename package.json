@@ -1,16 +1,19 @@
 {
   "name": "egna",
   "version": "0.0.1",
-  "description": "Pattern matching for Javascript",
+  "description": "Basic pattern matching for Javascript",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [
-    "pattern",
-    "matching",
+    "pattern matching",
     "library"
   ],
+  "repository" :
+    { "type" : "git",
+      "url" : "https://github.com/KaHole/egna.git"
+    },
   "author": "Kristian Andersen Hole",
   "license": "ISC"
 }
