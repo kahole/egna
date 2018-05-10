@@ -5,7 +5,7 @@
 const match = require('egna')
 ```
 
-Numbers
+**Numbers**
 ```javascript
 let n = Math.floor(Math.random() * 6)
 
@@ -17,7 +17,7 @@ match(n)(
 )
 ```
 
-Objects w/ destructuring (works with classes as well)
+**Objects w/ destructuring** (works with classes as well)
 ```javascript
 let car = {make: "toyota", year: 1985}
 
@@ -32,7 +32,7 @@ match(car)(
 // That is an old toyota
 ```
 
-Destructuring
+**Destructuring**
 ```javascript
 let car = {make: "suzuki", year: 1985}
 
@@ -43,7 +43,7 @@ let msg = match(car)(
 console.log(msg) // Nice suzuki from 1985
 ```
 
-Breakdown
+**Breakdown**
 ```javascript
 match(val)( // Match anything, returns whatever the matched function returns
 
