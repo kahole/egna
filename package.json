@@ -4,16 +4,19 @@
   "description": "Basic pattern matching for Javascript",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "mocha"
   },
   "keywords": [
     "pattern matching",
     "library"
   ],
-  "repository" :
-    { "type" : "git",
-      "url" : "https://github.com/KaHole/egna.git"
-    },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/KaHole/egna.git"
+  },
   "author": "Kristian Andersen Hole",
-  "license": "MIT"
+  "license": "MIT",
+  "devDependencies": {
+    "mocha": "^5.1.1"
+  }
 }

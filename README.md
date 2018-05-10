@@ -37,7 +37,7 @@ match(car)(
 let car = {make: "suzuki", year: 1985}
 
 let msg = match(car)(
-    ({year, make}) => `Nice ${make} from ${year}`,
+    ({year, make}) => `Nice ${make} from ${year}`
 )
 
 console.log(msg) // Nice suzuki from 1985

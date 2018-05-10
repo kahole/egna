@@ -14,7 +14,6 @@ msg = match(n)(
 console.log(msg)
 
 
-
 var car = {make: "toyota", year: 1985}
 
 msg = match(car)(
@@ -29,11 +28,10 @@ console.log(msg)
 
 
 
-
 car = {make: "suzuki", year: 1985}
 
 msg = match(car)(
-    ({year, make}) => `Nice ${make} from ${year}`,
+    ({year, make}) => `Nice ${make} from ${year}`
 )
 
 console.log(msg)
