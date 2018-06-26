@@ -11,8 +11,8 @@ const match = require('egna')
 fetch("/api/users")
     .then(res => res.json())
     .then(match(
-		{status: 'error'}, (error) => { throw Error(error.message) },
-		(users) => users // here users is just passed on in the Promise chain
+        {status: 'error'}, (error) => { throw Error(error.message) },
+        ({users}) => users // destructure and pass users to the Promise chain
     ))
     .catch(handleError);
 	
