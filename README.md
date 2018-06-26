@@ -6,18 +6,18 @@
 const match = require('egna')
 ```
 
-**Fetch example**
+**Fetch motivational example**
 ```javascript
 fetch("/api/users")
     .then(res => res.json())
     .then(match(
-		{status: 'error'}, ({errorCode}) => { throw Error(errorCode)},
-		(users) => users 
+		{status: 'error'}, (error) => { throw Error(error.message)},
+		(users) => users // do something with users
     ))
     .catch(handleError);
 	
 // Mock data used in example:
-// Error       {status: 'error', errorCode: 6}
+// Error       {status: 'error', errorMessage: 'Not logged in'}
 // Successful  {status: 'ok', users: [...]}
 ```
 
