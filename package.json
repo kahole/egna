@@ -1,6 +1,6 @@
 {
   "name": "egna",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "Basic pattern matching for Javascript",
   "main": "index.js",
   "scripts": {
@@ -18,5 +18,8 @@
   "license": "MIT",
   "devDependencies": {
     "mocha": "^5.1.1"
+  },
+  "dependencies": {
+    "npm": "^6.1.0"
   }
 }

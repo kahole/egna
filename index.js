@@ -1,8 +1,8 @@
 'use strict';
 
-module.exports = function(obj) {
+module.exports = function(...patterns) {
 
-    return (...patterns) => {
+    return (obj) => {
 
         for (var i = 0; i < patterns.length; i++) {
 
