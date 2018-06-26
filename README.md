@@ -12,13 +12,13 @@ fetch("/api/users")
     .then(res => res.json())
     .then(match(
 		{status: 'error'}, (error) => { throw Error(error.message)},
-		(users) => users // do something with users
+		(users) => users // here users is just passed on in the Promise chain
     ))
     .catch(handleError);
 	
 // Mock data used in example:
 // Error       {status: 'error', errorMessage: 'Not logged in'}
-// Successful  {status: 'ok', users: [...]}
+// Successful  {users: [...]}
 ```
 
 **Numbers**
@@ -26,9 +26,9 @@ fetch("/api/users")
 let n = Math.floor(Math.random() * 6)
 
 match(
-    0, _ => 'zero',
-    1, _ => 'one',
-    2, _ => 'two',
+    0, () => 'zero',
+    1, () => 'one',
+    2, () => 'two',
     _ => 'Thats a lot'
 )(n)
 ```
