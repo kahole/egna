@@ -1,6 +1,27 @@
 var assert = require('assert');
 const match = require('../index.js');
 
+const not_logged_in = 'Not logged in';
+
+function fetch(url) {
+    return Promise.resolve({json: () => { return {status: 'error', message: not_logged_in};}});
+}
+
+describe('Match mock API call', function() {
+    describe('#match()', function() {
+        it('should match on error and throw', function(done) {
+
+	    fetch("/api/users")
+	    .then(res => res.json())
+	    .then(match(
+			{status: 'error'}, (error) => { throw Error(error.message)},
+			(users) => { done(Error("Didnt match on error object")) }
+	    ))
+	    .catch(err => {done()});
+        });
+    });
+});
+
 describe('Match number', function() {
     describe('#match()', function() {
         it('should return one', function() {
