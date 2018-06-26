@@ -6,7 +6,7 @@
 const match = require('egna')
 ```
 
-**Fetch motivational example**
+**Fetch; motivational example**
 ```javascript
 fetch("/api/users")
     .then(res => res.json())
