@@ -6,6 +6,18 @@
 const match = require('egna')
 ```
 
+**In promises**
+```javascript
+fetch('/taco')
+    .then(res => res.json())
+    .then(match(
+        { sauce: 'mild' }, () => 'No thanks',
+        { sauce: 'extra hot' }, () => 'Good stuff!',
+        () => 'Fine.'
+    ))
+```
+
+
 **Numbers**
 ```javascript
 let n = Math.floor(Math.random() * 6)
