@@ -1,6 +1,22 @@
 'use strict';
 
-module.exports = function(...patterns) {
+function matchObject(pat, obj) {
+
+    return Object.keys(pat).reduce((totalMatch, prop) => {
+
+        let matches = true;
+        if ((pat[prop] != null && pat[prop].constructor === Object) &&
+            (obj[prop] != null && obj[prop].constructor === Object)) {
+            matches = matchObject(pat[prop], obj[prop]);
+        } else if (pat[prop] !== obj[prop]) {
+            matches = false;
+        }
+
+        return totalMatch && matches;
+    }, true);
+}
+
+module.exports = function (...patterns) {
 
     return (obj) => {
 
@@ -9,18 +25,11 @@ module.exports = function(...patterns) {
             let pat = patterns[i];
             var matches = true;
 
-            if (typeof pat === 'object') {
-                Object.keys(pat).forEach( prop => {
-                    if (pat[prop] !== obj[prop])
-                        matches = false;
-                });
+            if (typeof pat !== 'function') {
+                matches = matchObject({ v: pat }, { v: obj });
+                i += 1;
+            }
 
-                i += 1;
-            } else if (typeof pat !== 'function') {
-                matches = (pat === obj);
-                i += 1;
-            } 
-                
             let fun = patterns[i];
 
             if (matches)

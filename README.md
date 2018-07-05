@@ -6,21 +6,6 @@
 const match = require('egna')
 ```
 
-**Fetch; motivational example**
-```javascript
-fetch("/api/users")
-    .then(res => res.json())
-    .then(match(
-        {status: 'error'}, (error) => { throw Error(error.message) },
-        ({users}) => users // destructure and pass users to the Promise chain
-    ))
-    .catch(handleError);
-	
-// Mock data used in example:
-// Error       {status: 'error', errorMessage: 'Not logged in'}
-// Successful  {users: [...]}
-```
-
 **Numbers**
 ```javascript
 let n = Math.floor(Math.random() * 6)
@@ -48,6 +33,23 @@ match(
 // That is an old toyota
 ```
 
+**Map with deep object matching**
+```javascript
+let weather = [
+    { city: 'London', weather: { code: '123', name: 'Cloudy' } },
+    { city: 'Bergen', weather: { code: '234', name: 'Rainy' } }
+];
+
+weather.map(match(
+    { weather: { name: 'Rainy' } }, ({ city }) => 'Bring an umbrella to ' + city,
+    { weather: { name: 'Sunny' } }, ({ city }) => 'Bring some sunglasses to ' + city,
+    ({ city }) => 'Nothing to bring in ' + city
+));
+
+// Outputs:
+// [ 'Nothing to bring in London', 'Bring an umbrella to Bergen' ]
+```
+
 **Only destructuring**
 ```javascript
 let car = {make: "suzuki", year: 1985}
@@ -59,7 +61,7 @@ let msg = match(
 console.log(msg) // Nice suzuki from 1985
 ```
 
-**Breakdown**
+**Notes**
 ```javascript
 match(
     match_val, (val) => {}, /* Function for the case directly preceding it */
