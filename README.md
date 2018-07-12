@@ -12,37 +12,11 @@ fetch('/taco')
     .then(res => res.json())
     .then(match(
         { sauce: 'mild' }, () => 'No thanks',
-        { sauce: 'extra hot' }, () => 'Good stuff!',
-        () => 'Fine.'
+        { sauce: 'extra hot' }, () => 'Great!',
+        () => 'OK'
     ))
-```
 
-
-**Numbers**
-```javascript
-let n = Math.floor(Math.random() * 6)
-
-match(
-    0, () => 'zero',
-    1, () => 'one',
-    2, () => 'two',
-    _ => 'Thats a lot'
-)(n)
-```
-
-**Match object and destructure**
-```javascript
-let car = {make: "toyota", year: 1985}
-
-match(
-    {make: 'suzuki'}, ({year}) => `Nice suzuki from ${year}`,
-
-    {year: 1985}, ({make}) => `That is an old ${make}`,
-
-    () => "catch all"
-)(car)
-
-// That is an old toyota
+// Passes on 'No thanks', 'Great!' or 'OK' in the chain
 ```
 
 **Map with deep object matching**
@@ -62,25 +36,29 @@ weather.map(match(
 // [ 'Nothing to bring in London', 'Bring an umbrella to Bergen' ]
 ```
 
-**Only destructuring**
+**Match object and destructure**
 ```javascript
-let car = {make: "suzuki", year: 1985}
+let car = {make: "toyota", year: 1985}
 
-let msg = match(
-    ({year, make}) => `Nice ${make} from ${year}`
+match(
+    {make: 'suzuki'}, ({year}) => `Nice suzuki from ${year}`,
+
+    {year: 1985}, ({make}) => `That is an old ${make}`,
+
+    () => "catch all"
 )(car)
 
-console.log(msg) // Nice suzuki from 1985
+// That is an old toyota
 ```
 
-**Notes**
+**Works with any data type**
 ```javascript
+let n = Math.floor(Math.random() * 6)
+
 match(
-    match_val, (val) => {}, /* Function for the case directly preceding it */
-
-    (val) => "catch all", /* A lonely function is a catch-all case*/
-
-    /* val is passed to all the functions no matter what*/
-    ({property}) => "destructure an object" 
-)(val) // Match anything, returns whatever the matched function returns
+    0, () => 'zero',
+    1, () => 'one',
+    2, () => 'two',
+    _ => 'Thats a lot'
+)(n)
 ```
