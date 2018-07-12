@@ -24,9 +24,9 @@ fetch('/taco')
 let car = {make: "toyota", year: 1985}
 
 match(
-    {make: 'suzuki'}, ({year}) => `Nice suzuki from ${year}`,
+    {make: 'suzuki'}, ({ year }) => `Nice suzuki from ${year}`,
 
-    {year: 1985}, ({make}) => `That is an old ${make}`,
+    {year: 1985}, ({ make }) => `That is an old ${make}`,
 
     () => "catch all"
 )(car)
