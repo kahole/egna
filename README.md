@@ -19,6 +19,21 @@ fetch('/taco')
 // Passes on 'No thanks', 'Great!' or 'OK' in the chain
 ```
 
+**Match object and destructure**
+```javascript
+let car = {make: "toyota", year: 1985}
+
+match(
+    {make: 'suzuki'}, ({year}) => `Nice suzuki from ${year}`,
+
+    {year: 1985}, ({make}) => `That is an old ${make}`,
+
+    () => "catch all"
+)(car)
+
+// That is an old toyota
+```
+
 **Map with deep object matching**
 ```javascript
 let weather = [
@@ -34,21 +49,6 @@ weather.map(match(
 
 // Outputs:
 // [ 'Nothing to bring in London', 'Bring an umbrella to Bergen' ]
-```
-
-**Match object and destructure**
-```javascript
-let car = {make: "toyota", year: 1985}
-
-match(
-    {make: 'suzuki'}, ({year}) => `Nice suzuki from ${year}`,
-
-    {year: 1985}, ({make}) => `That is an old ${make}`,
-
-    () => "catch all"
-)(car)
-
-// That is an old toyota
 ```
 
 **Works with any data type**
