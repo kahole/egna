@@ -65,7 +65,7 @@ describe('Match undefined', function () {
     });
 });
 
-describe('Destructuring undefined', function () {
+describe('Destructuring car', function () {
     describe('#match()', function () {
         it('destructured value of year should be 1985', function () {
 
@@ -84,7 +84,7 @@ describe('Destructuring undefined', function () {
     });
 });
 
-describe('Destructuring undefined', function () {
+describe('Destructuring car', function () {
     describe('#match()', function () {
         it('return of match should be "Nice toyota from 1985"', function () {
 
