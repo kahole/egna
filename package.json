@@ -1,9 +1,12 @@
 {
   "name": "egna",
-  "version": "0.0.6",
+  "version": "0.1.0",
   "description": "Simple pattern matching for Javascript",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "module": "src/index.js",
   "scripts": {
+    "build": "babel src -d lib",
+    "prepublishOnly": "npm run build",
     "test": "mocha"
   },
   "keywords": [
@@ -20,6 +23,8 @@
   "author": "Kristian Andersen Hole",
   "license": "MIT",
   "devDependencies": {
+    "babel-cli": "^6.26.0",
+    "babel-preset-node6": "^11.0.0",
     "mocha": "^5.1.1"
   }
 }
