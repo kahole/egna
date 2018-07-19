@@ -3,22 +3,24 @@
 function matchObject(pat, obj) {
 
     return Object.keys(pat).reduce((totalMatch, prop) => {
-
-        let matches = true;
-        if ((pat[prop] != null && pat[prop].constructor === Object) &&
-            (obj[prop] != null && obj[prop].constructor === Object)) {
-            matches = matchObject(pat[prop], obj[prop]);
-        } else if (pat[prop] !== obj[prop]) {
-            matches = false;
-        }
-
-        return totalMatch && matches;
+        return totalMatch && matchAny(pat[prop], obj[prop]);
     }, true);
+}
+
+function matchAny(v1, v2) {
+
+    if ((v1 != null && v1.constructor === Object) &&
+        (v2 != null && v2.constructor === Object)) {
+        return matchObject(v1, v2);
+    } else if (v1 !== v2) {
+        return false;
+    }
+    return true;
 }
 
 module.exports = function (...patterns) {
 
-    return (obj) => {
+    return obj => {
 
         for (var i = 0; i < patterns.length; i++) {
 
@@ -26,14 +28,13 @@ module.exports = function (...patterns) {
             var matches = true;
 
             if (typeof pat !== 'function') {
-                matches = matchObject({ v: pat }, { v: obj });
+                matches = matchAny(pat, obj);
                 i += 1;
             }
 
             let fun = patterns[i];
 
-            if (matches)
-                return fun.apply(null, [obj]);
+            if (matches) return fun.apply(null, [obj]);
         }
     }
 }
