@@ -3,21 +3,11 @@
 module.exports = function (...patterns) {
 
     return obj => {
-
-        for (var i = 0; i < patterns.length; i++) {
-
-            let pat = patterns[i];
-            var matches = true;
-
-            if (typeof pat !== 'function') {
-                matches = matchAny(pat, obj);
-                i += 1;
-            }
-
-            let fun = patterns[i];
-
-            if (matches) return fun.apply(null, [obj]);
+        for (var i = 0; i < patterns.length - 1; i += 2) {
+            if (matchAny(patterns[i], obj))
+                return patterns[i + 1].apply(null, [obj]);
         }
+        return patterns[patterns.length - 1].apply(null, [obj]);
     };
 };
 

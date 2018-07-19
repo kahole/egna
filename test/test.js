@@ -192,3 +192,17 @@ describe('Custom matchlet', function () {
         });
     });
 });
+
+describe('Top level matchlets', function () {
+    describe('#match()', function () {
+        it('should match the greater than or equal option', function () {
+
+            let msg = match(
+                (n) => n >= 10, _ => 'Bigger or 10',
+                _ => 'Smaller than 10'
+            )(11);
+
+            assert.equal(msg, 'Bigger or 10');
+        });
+    });
+});
