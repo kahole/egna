@@ -33,7 +33,11 @@ function matchAny(v1, v2) {
     if ((v1 != null && v1.constructor === Object) &&
         (v2 != null && v2.constructor === Object)) {
         return matchObject(v1, v2);
-    } else if (v1 !== v2) {
+    }
+    else if (typeof v1 === 'function') {
+        return v1(v2);
+    }
+    else if (v1 !== v2) {
         return false;
     }
     return true;

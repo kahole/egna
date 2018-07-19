@@ -177,3 +177,18 @@ describe('Deep object matching', function () {
         });
     });
 });
+
+describe('Custom matchlet', function () {
+    describe('#match()', function () {
+        it('should match custom matchlet', function () {
+            let n = match({
+                num: n => n > 5
+            }, () => 1,
+                () => 2
+            )({
+                num: 50
+            });
+            assert.equal(n, 1);
+        });
+    });
+});
