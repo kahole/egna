@@ -21,7 +21,7 @@ fetch('/taco')
 
 **Match object and destructure**
 ```javascript
-let car = {make: "toyota", year: 1985}
+let car = {make: 'toyota', year: 1985}
 
 match(
     {make: 'suzuki'}, ({ year }) => `Nice suzuki from ${year}`,

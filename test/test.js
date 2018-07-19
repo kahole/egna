@@ -1,5 +1,5 @@
-var assert = require('assert');
-const match = require('../index.js');
+const assert = require('assert');
+const match = require('../lib/index.js');
 
 let weatherReports = [
     {
