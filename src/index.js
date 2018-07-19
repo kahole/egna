@@ -1,23 +1,5 @@
 'use strict';
 
-function matchObject(pat, obj) {
-
-    return Object.keys(pat).reduce((totalMatch, prop) => {
-        return totalMatch && matchAny(pat[prop], obj[prop]);
-    }, true);
-}
-
-function matchAny(v1, v2) {
-
-    if ((v1 != null && v1.constructor === Object) &&
-        (v2 != null && v2.constructor === Object)) {
-        return matchObject(v1, v2);
-    } else if (v1 !== v2) {
-        return false;
-    }
-    return true;
-}
-
 module.exports = function (...patterns) {
 
     return obj => {
@@ -36,5 +18,23 @@ module.exports = function (...patterns) {
 
             if (matches) return fun.apply(null, [obj]);
         }
+    };
+};
+
+function matchObject(pat, obj) {
+
+    return Object.keys(pat).reduce((totalMatch, prop) => {
+        return totalMatch && matchAny(pat[prop], obj[prop]);
+    }, true);
+}
+
+function matchAny(v1, v2) {
+
+    if ((v1 != null && v1.constructor === Object) &&
+        (v2 != null && v2.constructor === Object)) {
+        return matchObject(v1, v2);
+    } else if (v1 !== v2) {
+        return false;
     }
+    return true;
 }

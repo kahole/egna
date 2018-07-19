@@ -148,14 +148,14 @@ describe('Deep object matching', function () {
 
 describe('Deep object matching', function () {
     describe('#match()', function () {
-        it('should not match null', function () {
+        it('should not match undefined', function () {
             let n = match({
                 a: {
                     b: 'banana',
                 }
             }, () => 1,
                 () => 2
-            )(null);
+            )(undefined);
             assert.equal(n, 2);
         });
     });
