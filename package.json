@@ -2,7 +2,8 @@
   "name": "egna",
   "version": "0.0.7",
   "description": "Simple pattern matching for Javascript",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "module": "src/index.js",
   "scripts": {
     "build": "babel src -d lib",
     "prepublishOnly": "npm run build",
