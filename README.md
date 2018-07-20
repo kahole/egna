@@ -1,9 +1,9 @@
 # egna
 [![npm version](https://badge.fury.io/js/egna.svg)](https://www.npmjs.com/package/egna)
-## Simple pattern matching for JS
+## Pattern matching in JS
 
 ```javascript
-const match = require('egna')
+import { match } from 'egna'
 ```
 
 **In promises**

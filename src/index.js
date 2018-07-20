@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function (...patterns) {
+function match (...patterns) {
 
     return obj => {
         for (var i = 0; i < patterns.length - 1; i += 2) {
@@ -32,3 +32,10 @@ function matchAny(v1, v2) {
     }
     return true;
 }
+
+// Useful Matchlets
+const gt = (c) => ((n) => n > c);
+const lt = (c) => ((n) => n < c);
+const op = (c) => ((n) => c.contains(n));
+
+export { match, gt, lt, op};
