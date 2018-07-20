@@ -225,7 +225,7 @@ describe('Greater than matchlets', function () {
 
 describe('Array optionals matchlet', function () {
     describe('#match()', function () {
-        it('should match third gt matchlet', function () {
+        it('should match optionals matchlet', function () {
 
             let msg = match(
                 op([11, 12]), () => 1,
@@ -233,6 +233,34 @@ describe('Array optionals matchlet', function () {
             )(11);
 
             assert.equal(msg, 1);
+        });
+    });
+});
+
+describe('Object pattern with array optionals matchlet', function () {
+    describe('#match()', function () {
+        it('should match object pattern with optionals matchlet', function () {
+
+            let msg = match(
+                {vals: op([11, 12])}, () => 1,
+                () => 0
+            )({vals: 11});
+
+            assert.equal(msg, 1);
+        });
+    });
+});
+
+describe('Object pattern with array optionals matchlet', function () {
+    describe('#match()', function () {
+        it('should not match optionals matchlet', function () {
+
+            let msg = match(
+                {vals: op([11, 12])}, () => 1,
+                () => 0
+            )({vals: 13});
+
+            assert.equal(msg, 0);
         });
     });
 });
