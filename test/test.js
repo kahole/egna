@@ -1,5 +1,5 @@
 const assert = require('assert');
-const { match, gt } = require('../lib/index.js');
+const { match, gt, op } = require('../lib/index.js');
 
 let weatherReports = [
     {
@@ -203,6 +203,36 @@ describe('Top level matchlets', function () {
             )(11);
 
             assert.equal(msg, 'Bigger than 10');
+        });
+    });
+});
+
+describe('Greater than matchlets', function () {
+    describe('#match()', function () {
+        it('should match third gt matchlet', function () {
+
+            let msg = match(
+                gt(20), _ => 'Bigger than 20',
+                gt(10), _ => 'Between <10 .. 20]',
+                gt(0), _ => 'Bigger than 0',
+                _ => 'Smaller than or equal 0'
+            )(11);
+
+            assert.equal(msg, 'Between <10 .. 20]');
+        });
+    });
+});
+
+describe('Array optionals matchlet', function () {
+    describe('#match()', function () {
+        it('should match third gt matchlet', function () {
+
+            let msg = match(
+                op([11, 12]), () => 1,
+                () => 0
+            )(11);
+
+            assert.equal(msg, 1);
         });
     });
 });

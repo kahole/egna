@@ -7,7 +7,9 @@ function match (...patterns) {
             if (matchAny(patterns[i], obj))
                 return patterns[i + 1].apply(null, [obj]);
         }
-        return patterns[patterns.length - 1].apply(null, [obj]);
+        if (patterns.length % 2 === 1)
+            return patterns[patterns.length - 1].apply(null, [obj]);
+        return null;
     };
 };
 
@@ -36,6 +38,6 @@ function matchAny(v1, v2) {
 // Useful Matchlets
 const gt = (c) => ((n) => n > c);
 const lt = (c) => ((n) => n < c);
-const op = (c) => ((n) => c.contains(n));
+const op = (c) => ((n) => c.includes(n));
 
 export { match, gt, lt, op};
