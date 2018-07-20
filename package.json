@@ -14,7 +14,8 @@
     "pattern",
     "matching",
     "functional",
-    "library"
+    "library",
+    "match"
   ],
   "repository": {
     "type": "git",
