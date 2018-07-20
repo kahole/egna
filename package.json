@@ -25,7 +25,6 @@
   "devDependencies": {
     "babel-cli": "^6.26.0",
     "babel-preset-env": "^1.7.0",
-    "babel-preset-node6": "^11.0.0",
     "mocha": "^5.1.1"
   }
 }
