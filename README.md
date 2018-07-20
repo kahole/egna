@@ -15,8 +15,9 @@ fetch('/taco')
 
             { sauce: 'extra hot' }, ({ id }) => addSourCream(id),
 
-            (taco) => catchEveryTaco(taco)
+            (taco) => catchAnyTaco(taco)
     ))
+    .then( /* return value of the matched handler gets passed along */ )
 ```
 
 **Can match with any data type**
@@ -26,7 +27,7 @@ match(
 
     {another: 'pattern'}, anotherHandlerFunc,
 
-    _ => 'Single function at the end is the catch-all case'
+    _ => 'Single function at the end is the catch-any case'
 )
 // match() returns a function that you call with the value you want to be matched.
 ```
@@ -42,6 +43,7 @@ Some useful matchlet-generators included in egna:
 | `gt`       | Greater than `arg`                                        |
 | `lt`       | Less than `arg`                                           |
 | `op`       | Optional, value exists in the argument     array.  |
+
 
 ```javascript
 match(
