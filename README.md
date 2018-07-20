@@ -1,39 +1,87 @@
 # egna
 [![npm version](https://badge.fury.io/js/egna.svg)](https://www.npmjs.com/package/egna)
-## Simple pattern matching for JS
+## Pattern matching in JS
 
 ```javascript
-const match = require('egna')
+import { match } from 'egna'
 ```
 
 **In promises**
 ```javascript
 fetch('/taco')
-    .then(res => res.json())
-    .then(match(
-        { sauce: 'mild' }, () => 'No thanks',
-        { sauce: 'extra hot' }, () => 'Great!',
-        () => 'OK'
-    ))
+    .then(
+        match(
+            { sauce: 'mild' }, askForSpicierTaco,
 
-// Passes on 'No thanks', 'Great!' or 'OK' in the chain
+            { sauce: 'extra hot' }, ({ id }) => addSourCream(id),
+
+            (taco) => catchEveryTaco(taco)
+    ))
 ```
 
-**Match object and destructure**
+**Can match with any data type**
 ```javascript
-let car = {make: 'toyota', year: 1985}
+match(
+    'pattern', handlerFunc,
+
+    {another: 'pattern'}, anotherHandlerFunc,
+
+    _ => 'Single function at the end is the catch-all case'
+)
+// match() returns a function that you call with the value you want to be matched.
+```
+
+## Matchlet functions
+
+A function anywhere in a pattern will be evaluated in place of the usual comparison, returning true/false.
+
+Some useful matchlet-generators included in egna:
+
+| Name       | Matches                                                 |
+|------------|---------------------------------------------------------|
+| `gt`       | Greater than `arg`                                        |
+| `lt`       | Less than `arg`                                           |
+| `op`       | Optional, value exists in the argument     array.  |
+
+```javascript
+match(
+    {car: { year: lt(1970) }}, () => 'Thats vintage!',
+
+    {car: { year: lt(1999) }}, () => 'Thats a classic',
+
+    _ => 'Too modern'
+)
+```
+
+**Use egna's matchlets**
+```javascript
+import { match, gt, lt, op } from 'egna'
 
 match(
-    {make: 'suzuki'}, ({ year }) => `Nice suzuki from ${year}`,
+    gt(10), () => 'greater than 10',
 
-    {year: 1985}, ({ make }) => `That is an old ${make}`,
+    lt(5), () => 'less than 5',
 
-    () => "catch all"
-    
-)(car)
+    op([6, 7]), () => 'either 6 or 7',
 
-// That is an old toyota
+    _ => 'something else'
+)
 ```
+
+**or make your own**
+
+```javascript
+const even = n => n % 2 == 0;
+
+match(
+    even, () => 'even number',
+    _ => 'odd number'
+)(34)
+
+// returns 'even number'
+```
+
+## More examples
 
 **Map with deep object matching**
 ```javascript
@@ -44,22 +92,10 @@ let weather = [
 
 weather.map(match(
     { weather: { name: 'Rainy' } }, ({ city }) => 'Bring an umbrella to ' + city,
-    { weather: { name: 'Sunny' } }, ({ city }) => 'Bring some sunglasses to ' + city,
+    { weather: { name: 'Sunny' } }, ({ city }) => 'Bring sunglasses to ' + city,
     ({ city }) => 'Nothing to bring in ' + city
 ));
 
 // Outputs:
 // [ 'Nothing to bring in London', 'Bring an umbrella to Bergen' ]
-```
-
-**Works with any data type**
-```javascript
-let n = Math.floor(Math.random() * 6)
-
-match(
-    0, () => 'zero',
-    1, () => 'one',
-    2, () => 'two',
-    _ => 'Thats a lot'
-)(n)
 ```
