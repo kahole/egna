@@ -1,23 +1,15 @@
 'use strict';
 
-module.exports = function (...patterns) {
+function match (...patterns) {
 
     return obj => {
-
-        for (var i = 0; i < patterns.length; i++) {
-
-            let pat = patterns[i];
-            var matches = true;
-
-            if (typeof pat !== 'function') {
-                matches = matchAny(pat, obj);
-                i += 1;
-            }
-
-            let fun = patterns[i];
-
-            if (matches) return fun.apply(null, [obj]);
+        for (var i = 0; i < patterns.length - 1; i += 2) {
+            if (matchAny(patterns[i], obj))
+                return patterns[i + 1].apply(null, [obj]);
         }
+        if (patterns.length % 2 === 1)
+            return patterns[patterns.length - 1].apply(null, [obj]);
+        return null;
     };
 };
 
@@ -33,8 +25,19 @@ function matchAny(v1, v2) {
     if ((v1 != null && v1.constructor === Object) &&
         (v2 != null && v2.constructor === Object)) {
         return matchObject(v1, v2);
-    } else if (v1 !== v2) {
+    }
+    else if (typeof v1 === 'function') {
+        return v1(v2);
+    }
+    else if (v1 !== v2) {
         return false;
     }
     return true;
 }
+
+// Useful Matchlets
+const gt = (c) => ((n) => n > c);
+const lt = (c) => ((n) => n < c);
+const op = (c) => ((n) => c.includes(n));
+
+export { match, gt, lt, op};

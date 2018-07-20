@@ -1,5 +1,5 @@
 const assert = require('assert');
-const match = require('../lib/index.js');
+const { match, gt, op } = require('../lib/index.js');
 
 let weatherReports = [
     {
@@ -174,6 +174,93 @@ describe('Deep object matching', function () {
                 }
             });
             assert.equal(n, 2);
+        });
+    });
+});
+
+describe('Custom matchlet', function () {
+    describe('#match()', function () {
+        it('should match custom matchlet', function () {
+            let n = match({
+                num: n => n > 5
+            }, () => 1,
+                () => 2
+            )({
+                num: 50
+            });
+            assert.equal(n, 1);
+        });
+    });
+});
+
+describe('Top level matchlets', function () {
+    describe('#match()', function () {
+        it('should match the greater than option', function () {
+
+            let msg = match(
+                gt(10), _ => 'Bigger than 10',
+                _ => 'Smaller than or equal 10'
+            )(11);
+
+            assert.equal(msg, 'Bigger than 10');
+        });
+    });
+});
+
+describe('Greater than matchlets', function () {
+    describe('#match()', function () {
+        it('should match third gt matchlet', function () {
+
+            let msg = match(
+                gt(20), _ => 'Bigger than 20',
+                gt(10), _ => 'Between <10 .. 20]',
+                gt(0), _ => 'Bigger than 0',
+                _ => 'Smaller than or equal 0'
+            )(11);
+
+            assert.equal(msg, 'Between <10 .. 20]');
+        });
+    });
+});
+
+describe('Array optionals matchlet', function () {
+    describe('#match()', function () {
+        it('should match optionals matchlet', function () {
+
+            let msg = match(
+                op([11, 12]), () => 1,
+                () => 0
+            )(11);
+
+            assert.equal(msg, 1);
+        });
+    });
+});
+
+describe('Object pattern with array optionals matchlet', function () {
+    describe('#match()', function () {
+        it('should match object pattern with optionals matchlet', function () {
+
+            let msg = match(
+                {vals: op([11, 12])}, () => 1,
+                () => 0
+            )({vals: 11});
+
+            assert.equal(msg, 1);
+        });
+    });
+});
+
+describe('Object pattern with array optionals matchlet', function () {
+    describe('#match()', function () {
+        it('should not match optionals matchlet', function () {
+
+            let msg = match(
+                {vals: op([11, 12])}, () => 1,
+                () => 0
+            )({vals: 13});
+
+            assert.equal(msg, 0);
         });
     });
 });
