@@ -44,7 +44,7 @@ Some useful matchlet-generators included in egna:
 | `lt`       | Less than `arg`                                           |
 | `op`       | Optional, value exists in the argument     array.  |
 
-
+----
 ```javascript
 match(
     {car: { year: lt(1970) }}, () => 'Thats vintage!',
