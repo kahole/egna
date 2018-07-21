@@ -1,5 +1,7 @@
 var { match, lt } = require("egna")
 
+/*Try changing the year to something earlier than 1950*/
+
 let car = async () => ({make: 'Toyota', year: 1968});
 
 car().then(

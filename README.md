@@ -1,6 +1,5 @@
 # egna <span style="font-size: 16px"> - pattern matching in JS</span>
 [![npm version](https://badge.fury.io/js/egna.svg)](https://www.npmjs.com/package/egna)
-<!-- ## Pattern matching in JS -->
 
 ```javascript
 import { match } from 'egna'
