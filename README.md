@@ -1,60 +1,60 @@
-# egna
+# egna <span style="font-size: 16px"> - pattern matching in JS</span>
 [![npm version](https://badge.fury.io/js/egna.svg)](https://www.npmjs.com/package/egna)
-## Pattern matching in JS
 
 ```javascript
 import { match } from 'egna'
 ```
+[[ Try it out! ]](https://npm.runkit.com/egna)
 
-**In promises**
+**Example**
 ```javascript
-fetch('/taco')
-    .then(
-        match(
-            { sauce: 'mild' }, askForSpicierTaco,
+fetch('/uptime/status').then(
+    match(
+        { status: 'normal' }, () => 'Operating normally',
 
-            { sauce: 'extra hot' }, ({ id }) => addSourCream(id),
+        { status: 'warning' }, ({ msg }) => displayWarning(msg),
 
-            (taco) => catchAnyTaco(taco)
-    ))
-    .then( /* return value of the matched handler gets passed along */ )
+        { status: 'error', rate: gt(50) }, () => 'Error rate higher than 50%',
+
+        _ => 'Some errors'
+    )
+)
+.then( /* return value of first the matched handler gets passed along */ )
 ```
 
-**Can match with any data type**
+**Match anything**
 ```javascript
 match(
-    'pattern', handlerFunc,
+    'literal pattern', handlerFunc,
 
-    {another: 'pattern'}, anotherHandlerFunc,
+    { my: { object: 'pattern' } }, anotherHandlerFunc,
 
-    _ => 'Single function at the end is the catch-any case'
+    _ => 'Single function at the end is the catch-any handler'
 )
-// match() returns a function that you call with the value you want to be matched.
 ```
 
 ## Matchlet functions
+**A function anywhere in a pattern will be evaluated in place of the usual comparison, returning true/false.**
 
-A function anywhere in a pattern will be evaluated in place of the usual comparison, returning true/false.
-
-Some useful matchlet-generators included in egna:
+Matchlet-generators included in egna:
 
 | Name       | Matches                                                 |
 |------------|---------------------------------------------------------|
-| `gt`       | Greater than `arg`                                        |
-| `lt`       | Less than `arg`                                           |
-| `op`       | Optional, value exists in the argument     array.  |
+| `gt`       | Greater than `arg`                                      |
+| `lt`       | Less than `arg`                                         |
+| `op`       | Optional, value exists in the argument array.           |
 
-
+<!-- ----
+**Example using `lt`:**
 ```javascript
 match(
-    {car: { year: lt(1970) }}, () => 'Thats vintage!',
+    { car: { year: lt(1970) } }, () => 'Thats vintage!',
 
-    {car: { year: lt(1999) }}, () => 'Thats a classic',
+    { car: { year: gt(1999) } }, () => 'Thats a classic',
 
     _ => 'Too modern'
 )
-```
-
+``` -->
 **Use egna's matchlets**
 ```javascript
 import { match, gt, lt, op } from 'egna'
@@ -69,7 +69,6 @@ match(
     _ => 'something else'
 )
 ```
-
 **or make your own**
 
 ```javascript
@@ -98,6 +97,22 @@ weather.map(match(
     ({ city }) => 'Nothing to bring in ' + city
 ));
 
-// Outputs:
-// [ 'Nothing to bring in London', 'Bring an umbrella to Bergen' ]
+// returns [ 'Nothing to bring in London', 'Bring an umbrella to Bergen' ]
 ```
+
+<!-- ```javascript
+match(
+    // Match literals
+    42, () => 'The meaning of life',
+
+    // Match object patterns and destructure
+    {name: 'Banana'}, ({ color }) => 'Bananas are ' + color,
+
+    // Use egna's matchlets
+    {car: { year: lt(1970) }}, () => 'Thats vintage!',
+    
+    // Use your own matchlets
+    {car: { year: (y) => y < 1970 }}, () => 'Thats also vintage!',
+
+)
+``` -->
