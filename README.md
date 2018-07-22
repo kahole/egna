@@ -21,7 +21,7 @@ fetch('/uptime/status').then(
         _ => 'Some errors'
     )
 )
-.then( /* return value of first the matched handler gets passed along */ )
+.then( /* return value of the matched handler gets passed along */ )
 ```
 
 **Match anything**
