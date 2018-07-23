@@ -1,266 +1,263 @@
 const assert = require('assert');
-const { match, gt, op } = require('../lib/index.js');
+const { match, gt, lt, op } = require('../lib/index.js');
 
-let weatherReports = [
-    {
-        city: 'London',
-        weather: {
-            code: '123',
-            name: 'Rainy'
-        }
-    },
-    {
-        city: 'Paris',
-        weather: {
-            code: '234',
-            name: 'Sunny'
-        }
-    }
-];
+const promise = async (d) => d;
 
-describe('Map', function () {
-    describe('#match()', function () {
-        it('Deep object matching should match on Rainy ', function () {
+function testPatternWithData({ pattern, data }) {
+    return promise(data)
+        .then(pattern)
+        .then(assert.ok);
+}
 
-            const weatherMessage = 'Bring an umbrella to ';
+describe('#match()', function () {
 
-            let weatherMessages = weatherReports.map(match(
-                { weather: { name: 'Rainy' } }, ({ city }) => weatherMessage + city
-            ));
+    describe('Match types', function () {
 
-            assert.equal(weatherMessages[0], weatherMessage + weatherReports[0].city);
+        it('matches number', function () {
+            const data = 1;
+            const pattern = match(
+                data, () => true,
+                _ => false
+            );
+
+            return testPatternWithData({ pattern, data });
+        });
+
+        it('doesnt match number, but catches any', function () {
+            const data = 2;
+            const pattern = match(
+                1, () => false,
+                _ => true
+            );
+
+            return testPatternWithData({ pattern, data });
+        });
+
+        it('matches string', function () {
+            const data = 'test_string';
+            const pattern = match(
+                data, () => true,
+                _ => false
+            );
+
+            return testPatternWithData({ pattern, data });
+        });
+
+        it('matches bool', function () {
+            const data = true;
+            const pattern = match(
+                data, () => true,
+                _ => false
+            );
+
+            return testPatternWithData({ pattern, data });
+        });
+
+        it('matches object', function () {
+            const data = { test: 'object' };
+            const pattern = match(
+                data, () => true,
+                _ => false
+            );
+
+            return testPatternWithData({ pattern, data });
+        });
+
+        it('matches deep object', function () {
+            const data = { test: { deep: 'object' } };
+            const pattern = match(
+                data, () => true,
+                _ => false
+            );
+
+            return testPatternWithData({ pattern, data });
+        });
+
+        it('matches deep object pattern in multi-object pattern', function () {
+            const data = { test: { deep: 'object' } };
+            const pattern = match(
+                { other: 'object' }, () => false,
+                { notCorrect: 'object' }, () => false,
+                data, () => true,
+                _ => false
+            );
+
+            return testPatternWithData({ pattern, data });
+        });
+
+    });
+
+    describe('Edge cases', function () {
+
+        it('matches object with more props than pattern', function () {
+            const data = { test: { deep: 'object' }, banana: 12 };
+            const pattern = match(
+                { other: 'object' }, () => false,
+                { notCorrect: 'object' }, () => false,
+                { banana: 12 }, () => true,
+                _ => false
+            );
+
+            return testPatternWithData({ pattern, data });
+        });
+
+        it('doesnt match object with less props than pattern', function () {
+            const data = { test: { deep: 'object' } };
+            const pattern = match(
+                { other: 'object' }, () => false,
+                { notCorrect: 'object' }, () => false,
+                { test: { deep: 'object' }, banana: 12 }, () => false,
+                _ => true
+            );
+
+            return testPatternWithData({ pattern, data });
+        });
+
+        it('doesnt match with null or undefined', function () {
+            const data = { test: { deep: 'object' } };
+            const pattern = match(
+                { other: 'object' }, () => false,
+                { notCorrect: 'object' }, () => false,
+                { test: { deep: undefined } }, () => false,
+                { test: { deep: null } }, () => false,
+                _ => true
+            );
+
+            return testPatternWithData({ pattern, data });
+        });
+
+        it('null doesnt get matched with actual values', function () {
+            const data = { test: { deep: null } };
+            const pattern = match(
+                { other: 'object' }, () => false,
+                { notCorrect: 'object' }, () => false,
+                { test: { deep: 'object' } }, () => false,
+                _ => true
+            );
+
+            return testPatternWithData({ pattern, data });
+        });
+
+        it('undefined doesnt get matched with actual values', function () {
+            const data = { test: { deep: undefined } };
+            const pattern = match(
+                { other: 'object' }, () => false,
+                { notCorrect: 'object' }, () => false,
+                { test: { deep: 'object' } }, () => false,
+                _ => true
+            );
+
+            return testPatternWithData({ pattern, data });
         });
     });
-});
 
-describe('Match number', function () {
-    describe('#match()', function () {
-        it('should return one', function () {
+    describe('Matchlets', function () {
 
-            let msg = match(
-                0, _ => 'zero',
-                1, _ => 'one',
-                2, _ => 'two',
-                _ => 'Thats a lot'
-            )(1);
+        it('greater-than matchlet matches higher number', function () {
+            const data = 1;
+            const pattern = match(
+                gt(data - 1), () => true,
+                _ => false
+            );
 
-            assert.equal(msg, 'one');
+            return testPatternWithData({ pattern, data });
         });
-    });
-});
 
-describe('Match undefined', function () {
-    describe('#match()', function () {
-        it('undefined should go to catch all case', function () {
-
-            let msg = match(
-                0, _ => 'zero',
-                1, _ => 'one',
-                2, _ => 'two',
-                _ => 'Thats a lot'
-            )(undefined);
-
-            assert.equal(msg, 'Thats a lot');
-        });
-    });
-});
-
-describe('Destructuring car', function () {
-    describe('#match()', function () {
-        it('destructured value of year should be 1985', function () {
-
-            let car = {
-                make: "suzuki",
-                year: 1985
-            };
-
-            match(
-                ({
-                    year,
-                    make
-                }) => assert.equal(year, 1985)
-            )(car);
-        });
-    });
-});
-
-describe('Destructuring car', function () {
-    describe('#match()', function () {
-        it('return of match should be "Nice toyota from 1985"', function () {
-
-            let car = {
-                make: "toyota",
-                year: 1985
-            };
-
-            let msg = match(
-                ({
-                    year,
-                    make
-                }) => `Nice ${make} from ${year}`
-            )(car);
-
-            assert.equal(msg, 'Nice toyota from 1985');
-        });
-    });
-});
-
-describe('Deep object matching', function () {
-    describe('#match()', function () {
-        it('should match deep object', function () {
-            let n = match({
-                a: {
-                    b: 'banana',
-                    extra: 'extra'
-                }
-            }, () => 1,
-                () => 2
-            )({
-                a: {
-                    b: 'banana',
-                    extra: 'extra'
-                }
-            });
-            assert.equal(n, 1);
-        });
-    });
-});
-
-describe('Deep object matching', function () {
-    describe('#match()', function () {
-        it('should match deep object', function () {
-            let n = match({
-                a: {
-                    b: 'banana'
-                }
-            }, () => 1,
-                () => 2
-            )({
-                a: {
-                    b: 'banana',
-                    extra: 'extra'
-                }
-            });
-            assert.equal(n, 1);
-        });
-    });
-});
-
-describe('Deep object matching', function () {
-    describe('#match()', function () {
-        it('should not match undefined', function () {
-            let n = match({
-                a: {
-                    b: 'banana',
-                }
-            }, () => 1,
-                () => 2
-            )(undefined);
-            assert.equal(n, 2);
-        });
-    });
-});
-
-describe('Deep object matching', function () {
-    describe('#match()', function () {
-        it('should not match null pattern', function () {
-            let n = match({
-                anything: null
-            }, () => 1,
-                () => 2
-            )({
-                anything: {
-                    something: true
-                }
-            });
-            assert.equal(n, 2);
-        });
-    });
-});
-
-describe('Custom matchlet', function () {
-    describe('#match()', function () {
-        it('should match custom matchlet', function () {
-            let n = match({
-                num: n => n > 5
-            }, () => 1,
-                () => 2
-            )({
-                num: 50
-            });
-            assert.equal(n, 1);
-        });
-    });
-});
-
-describe('Top level matchlets', function () {
-    describe('#match()', function () {
-        it('should match the greater than option', function () {
-
-            let msg = match(
-                gt(10), _ => 'Bigger than 10',
-                _ => 'Smaller than or equal 10'
-            )(11);
-
-            assert.equal(msg, 'Bigger than 10');
-        });
-    });
-});
-
-describe('Greater than matchlets', function () {
-    describe('#match()', function () {
         it('should match third gt matchlet', function () {
 
-            let msg = match(
-                gt(20), _ => 'Bigger than 20',
-                gt(10), _ => 'Between <10 .. 20]',
-                gt(0), _ => 'Bigger than 0',
-                _ => 'Smaller than or equal 0'
-            )(11);
+            const data = 9;
+            const pattern = match(
+                gt(20), () => false,
+                gt(10), () => false,
+                gt(0), () => true,
+                _ => false
+            );
 
-            assert.equal(msg, 'Between <10 .. 20]');
+            return testPatternWithData({ pattern, data });
+        });
+
+        it('less-than matchlet matches lower number', function () {
+            const data = 1;
+            const pattern = match(
+                lt(data + 1), () => true,
+                _ => false
+            );
+
+            return testPatternWithData({ pattern, data });
+        });
+
+        it('optional matchlet matches values in array', function () {
+            const data = 1;
+            const pattern = match(
+                op([data]), () => true,
+                _ => false
+            );
+
+            return testPatternWithData({ pattern, data });
+        });
+
+        it('object-wrapped greater-than matchlet matches higher number', function () {
+            const data = { num: 1 };
+            const pattern = match(
+                { num: gt(data.num - 1) }, () => true,
+                _ => false
+            );
+
+            return testPatternWithData({ pattern, data });
+        });
+
+        it('object-wrapped less-than matchlet matches lower number', function () {
+            const data = { num: 1 };
+            const pattern = match(
+                { num: lt(data.num + 1) }, () => true,
+                _ => false
+            );
+
+            return testPatternWithData({ pattern, data });
+        });
+
+        it('object-wrapped optional matchlet matches values in array', function () {
+            const data = { num: 1 };
+            const pattern = match(
+                { num: op([data.num]) }, () => true,
+                _ => false
+            );
+
+            return testPatternWithData({ pattern, data });
+        });
+
+        it('doesnt match matchlet in mismatching pattern', function () {
+            const data = { num: 1 };
+            const pattern = match(
+                { d: op([data.num]) }, () => false,
+                _ => true
+            );
+
+            return testPatternWithData({ pattern, data });
         });
     });
-});
 
-describe('Array optionals matchlet', function () {
-    describe('#match()', function () {
-        it('should match optionals matchlet', function () {
+    describe('Custom matchlets', function () {
 
-            let msg = match(
-                op([11, 12]), () => 1,
-                () => 0
-            )(11);
+        it('even number matchlet matches even number', function () {
+            const even = n => n % 2 == 0;
+            const data = 2;
+            const pattern = match(
+                even, () => true,
+                _ => false
+            );
+            return testPatternWithData({ pattern, data });
+        });
 
-            assert.equal(msg, 1);
+        it('even number matchlet doesnt match odd number', function () {
+            const even = n => n % 2 == 0;
+            const data = 1;
+            const pattern = match(
+                even, () => false,
+                _ => true
+            );
+            return testPatternWithData({ pattern, data });
         });
     });
-});
 
-describe('Object pattern with array optionals matchlet', function () {
-    describe('#match()', function () {
-        it('should match object pattern with optionals matchlet', function () {
-
-            let msg = match(
-                {vals: op([11, 12])}, () => 1,
-                () => 0
-            )({vals: 11});
-
-            assert.equal(msg, 1);
-        });
-    });
-});
-
-describe('Object pattern with array optionals matchlet', function () {
-    describe('#match()', function () {
-        it('should not match optionals matchlet', function () {
-
-            let msg = match(
-                {vals: op([11, 12])}, () => 1,
-                () => 0
-            )({vals: 13});
-
-            assert.equal(msg, 0);
-        });
-    });
 });
