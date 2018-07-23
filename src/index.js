@@ -40,4 +40,4 @@ const gt = (c) => ((n) => n > c);
 const lt = (c) => ((n) => n < c);
 const op = (c) => ((n) => c.includes(n));
 
-export { match, gt, lt, op};
+export { match, gt, lt, op };
