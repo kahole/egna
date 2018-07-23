@@ -5,10 +5,10 @@ function match (...patterns) {
     return obj => {
         for (var i = 0; i < patterns.length - 1; i += 2) {
             if (matchAny(patterns[i], obj))
-                return patterns[i + 1].apply(null, [obj]);
+                return patterns[i + 1](obj);
         }
         if (patterns.length % 2 === 1)
-            return patterns[patterns.length - 1].apply(null, [obj]);
+            return patterns[patterns.length - 1](obj);
         return null;
     };
 };
