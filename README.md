@@ -8,49 +8,48 @@ import { match } from 'egna'
 ```
 [[ Try it out! ]](https://npm.runkit.com/egna)
 
-**[tc39 proposal](http://google.com/) example:**
+**[tc39 proposal](https://github.com/tc39/proposal-pattern-matching) example:**
 ```javascript
-fetch(jsonService)
-    .then(
-        match(
-            { status: 200 }, ({ headers: { 'Content-Length': s } }) => {
-                console.log(`size is ${s}`)
-            },
-            { status: 404 }, () => {
-                console.log('JSON not found')
-            },
-            { status: gt(399) }, () => {
-                throw new RequestError(res)
-            }
-        )
-    )
-```
+fetch(jsonService).then(
 
+  match(
+    { status: 200 }, ({ headers: { 'Content-Length': s } }) => {
+      console.log(`size is ${s}`)
+    },
+    { status: 404 }, () => {
+      console.log('JSON not found')
+    },
+    { status: gt(399) }, () => {
+      throw new RequestError(res)
+    }
+  )
+)
+```
 
 **Example**
 ```javascript
 fetch('/uptime/status').then(
-    match(
-        { status: 'normal' }, () => 'Operating normally',
+  match(
+    { status: 'normal' }, () => 'Operating normally',
 
-        { status: 'warning' }, ({ msg }) => displayWarning(msg),
+    { status: 'warning' }, ({ msg }) => displayWarning(msg),
 
-        { status: 'error', rate: gt(50) }, () => 'Error rate higher than 50%',
+    { status: 'error', rate: gt(50) }, () => 'Error rate higher than 50%',
 
-        _ => 'Some errors'
-    )
+    _ => 'Some errors'
+  )
 )
-.then( /* return value of the matched handler gets passed along */ )
+.then( /* return value of the matched handler gets passed along */)
 ```
 
 **Match anything**
 ```javascript
 match(
-    'literal pattern', handlerFunc,
+  'literal pattern', handlerFunc,
 
-    { my: { object: 'pattern' } }, anotherHandlerFunc,
+  { my: { object: 'pattern' } }, anotherHandlerFunc,
 
-    _ => 'Single function at the end is the catch-any handler'
+  _ => 'Single function at the end is the catch-any handler'
 )
 ```
 
@@ -81,13 +80,13 @@ match(
 import { match, gt, lt, op } from 'egna'
 
 match(
-    gt(10), () => 'greater than 10',
+  gt(10), () => 'greater than 10',
 
-    lt(5), () => 'less than 5',
+  lt(5), () => 'less than 5',
 
-    op([6, 7]), () => 'either 6 or 7',
+  op([6, 7]), () => 'either 6 or 7',
 
-    _ => 'something else'
+  _ => 'something else'
 )
 ```
 **or make your own**
@@ -96,8 +95,8 @@ match(
 const even = n => n % 2 == 0;
 
 match(
-    even, () => 'even number',
-    _ => 'odd number'
+  even, () => 'even number',
+  _ => 'odd number'
 )(34)
 
 // returns 'even number'
@@ -108,14 +107,14 @@ match(
 **Map with deep object matching**
 ```javascript
 let weather = [
-    { city: 'London', weather: { code: '123', name: 'Cloudy' } },
-    { city: 'Bergen', weather: { code: '234', name: 'Rainy' } }
+  { city: 'London', weather: { code: '123', name: 'Cloudy' } },
+  { city: 'Bergen', weather: { code: '234', name: 'Rainy' } }
 ];
 
 weather.map(match(
-    { weather: { name: 'Rainy' } }, ({ city }) => 'Bring an umbrella to ' + city,
-    { weather: { name: 'Sunny' } }, ({ city }) => 'Bring sunglasses to ' + city,
-    ({ city }) => 'Nothing to bring in ' + city
+  { weather: { name: 'Rainy' } }, ({ city }) => 'Bring an umbrella to ' + city,
+  { weather: { name: 'Sunny' } }, ({ city }) => 'Bring sunglasses to ' + city,
+  ({ city }) => 'Nothing to bring in ' + city
 ));
 
 // returns [ 'Nothing to bring in London', 'Bring an umbrella to Bergen' ]
