@@ -8,6 +8,25 @@ import { match } from 'egna'
 ```
 [[ Try it out! ]](https://npm.runkit.com/egna)
 
+**[tc39 proposal](http://google.com/) example:**
+```javascript
+fetch(jsonService)
+    .then(
+        match(
+            { status: 200 }, ({ headers: { 'Content-Length': s } }) => {
+                console.log(`size is ${s}`)
+            },
+            { status: 404 }, () => {
+                console.log('JSON not found')
+            },
+            { status: gt(399) }, () => {
+                throw new RequestError(res)
+            }
+        )
+    )
+```
+
+
 **Example**
 ```javascript
 fetch('/uptime/status').then(
