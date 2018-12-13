@@ -8,27 +8,10 @@ import { match } from 'egna'
 ```
 [[ Try it out! ]](https://npm.runkit.com/egna)
 
-**[tc39 proposal](https://github.com/tc39/proposal-pattern-matching) example:**
-```javascript
-fetch(jsonService).then(
-
-  match(
-    { status: 200 }, ({ headers: { 'Content-Length': s } }) => {
-      console.log(`size is ${s}`)
-    },
-    { status: 404 }, () => {
-      console.log('JSON not found')
-    },
-    { status: gt(399) }, () => {
-      throw new RequestError(res)
-    }
-  )
-)
-```
-
 **Example**
 ```javascript
-fetch('/uptime/status').then(
+fetch('/uptime/status').then(r => r.json())
+.then(
   match(
     { status: 'normal' }, () => 'Operating normally',
 
@@ -39,7 +22,8 @@ fetch('/uptime/status').then(
     _ => 'Some errors'
   )
 )
-.then( /* return value of the matched handler gets passed along */)
+// say fetch returns {status: 'warning', msg: 'disk nearing full', rate: 10}
+// the middle pattern would match and displayWarning called with the message: 'disk nearing full'
 ```
 
 **Match anything**
@@ -51,6 +35,19 @@ match(
 
   _ => 'Single function at the end is the catch-any handler'
 )
+.then( /* return value of the matched handler gets passed along the promise chain */)
+```
+
+**Value being matched is passed to handlers**
+```javascript
+let ball = { mass: 5, volume: 10 }
+
+match(
+  { mass: 5 }, (ball) => throwBall(ball),
+
+  { volume: gt(20) }, ({ mass, volume }) => density(mass, volume)  //destructure objects
+  
+)(ball) // Trigger match w/o promise
 ```
 
 ## Matchlet functions
@@ -120,6 +117,23 @@ weather.map(match(
 // returns [ 'Nothing to bring in London', 'Bring an umbrella to Bergen' ]
 ```
 
+**[tc39 proposal](https://github.com/tc39/proposal-pattern-matching) example:**
+```javascript
+fetch(jsonService).then(
+
+  match(
+    { status: 200 }, ({ headers: { 'Content-Length': s } }) => {
+      console.log(`size is ${s}`)
+    },
+    { status: 404 }, () => {
+      console.log('JSON not found')
+    },
+    { status: gt(399) }, () => {
+      throw new RequestError(res)
+    }
+  )
+)
+```
 <!-- ```javascript
 match(
     // Match literals
