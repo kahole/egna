@@ -1,6 +1,6 @@
 {
   "name": "egna",
-  "version": "1.0.4",
+  "version": "1.0.5",
   "description": "Pattern matching in Javascript",
   "main": "lib/index.js",
   "module": "src/index.js",
