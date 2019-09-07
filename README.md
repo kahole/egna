@@ -28,12 +28,14 @@ fetch('/uptime/status').then(r => r.json())
 
 **Match anything**
 ```javascript
-match(
-  'literal pattern', handlerFunc,
+.then(
+  match(
+    'literal pattern', handlerFunc,
 
-  { my: { object: 'pattern' } }, anotherHandlerFunc,
+    { my: { object: 'pattern' } }, anotherHandlerFunc,
 
-  _ => 'Single function at the end is the catch-any handler'
+    _ => 'Single function at the end is the catch-any handler'
+  )
 )
 .then( /* return value of the matched handler gets passed along the promise chain */)
 ```
