@@ -260,4 +260,20 @@ describe('#match()', function () {
     });
   });
 
+  describe('Promise prototype function', function () {
+
+    it('Promise prototype function', function () {
+
+      const even = n => n % 2 == 0;
+      const data = 2;
+
+      return promise(data)
+        .match(
+          even, () => true,
+          _ => false
+        )
+        .then(assert.ok);
+    });
+  });
+
 });
