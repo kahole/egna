@@ -11,8 +11,7 @@ import { match } from 'egna'
 **Example**
 ```javascript
 fetch('/uptime/status').then(r => r.json())
-.then(
-  match(
+  .match(
     { status: 'normal' }, () => 'Operating normally',
 
     { status: 'warning' }, ({ msg }) => displayWarning(msg),
@@ -21,21 +20,19 @@ fetch('/uptime/status').then(r => r.json())
 
     _ => 'Some errors'
   )
-)
+
 // say fetch returns {status: 'warning', msg: 'disk nearing full', rate: 10}
 // the middle pattern would match and displayWarning called with the message: 'disk nearing full'
 ```
 
 **Match anything**
 ```javascript
-.then(
-  match(
-    'literal pattern', handlerFunc,
+.match(
+  'literal pattern', handlerFunc,
 
-    { my: { object: 'pattern' } }, anotherHandlerFunc,
+  { my: { object: 'pattern' } }, anotherHandlerFunc,
 
-    _ => 'Single function at the end is the catch-any handler'
-  )
+  _ => 'Single function at the end is the catch-any handler'
 )
 .then( /* return value of the matched handler gets passed along the promise chain */)
 ```
@@ -49,7 +46,7 @@ match(
 
   { volume: gt(20) }, ({ mass, volume }) => density(mass, volume)  //destructure objects
   
-)(ball) // Trigger match w/o promise
+)(ball) // Call match without promise
 ```
 
 ## Matchlet functions
@@ -121,9 +118,8 @@ weather.map(match(
 
 **[tc39 proposal](https://github.com/tc39/proposal-pattern-matching) example:**
 ```javascript
-fetch(jsonService).then(
-
-  match(
+fetch(jsonService)
+  .match(
     { status: 200 }, ({ headers: { 'Content-Length': s } }) => {
       console.log(`size is ${s}`)
     },
@@ -134,21 +130,4 @@ fetch(jsonService).then(
       throw new RequestError(res)
     }
   )
-)
 ```
-<!-- ```javascript
-match(
-    // Match literals
-    42, () => 'The meaning of life',
-
-    // Match object patterns and destructure
-    {name: 'Banana'}, ({ color }) => 'Bananas are ' + color,
-
-    // Use egna's matchlets
-    {car: { year: lt(1970) }}, () => 'Thats vintage!',
-    
-    // Use your own matchlets
-    {car: { year: (y) => y < 1970 }}, () => 'Thats also vintage!',
-
-)
-``` -->

@@ -4,15 +4,13 @@ var { match, lt } = require("egna")
 
 let car = async () => ({ make: 'Toyota', year: 1968 });
 
-car().then(
-  match(
-    { make: 'Subaru'}, () => 'Subaru',
-    
-    { year: lt(1950), make: 'Toyota' }, () => 'Super old toyota',
+car().match(
+  { make: 'Subaru'}, () => 'Subaru',
+  
+  { year: lt(1950), make: 'Toyota' }, () => 'Super old toyota',
 
-    { make: 'Toyota' }, ({ year }) => `Toyota from ${year}`,
+  { make: 'Toyota' }, ({ year }) => `Toyota from ${year}`,
 
-    _ => 'something else'
-  )
+  _ => 'something else'
 )
 .then(console.log)
