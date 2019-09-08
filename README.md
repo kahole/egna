@@ -6,7 +6,7 @@
 ```javascript
 import { match } from 'egna'
 ```
-[[ Try it out in your browser! ]](https://npm.runkit.com/egna)
+[[ Try it in your browser ]](https://npm.runkit.com/egna)
 
 **Example**
 ```javascript
