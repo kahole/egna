@@ -42,11 +42,14 @@ const op = (c) => ((n) => c.includes(n));
 
 // Promise chaining
 if(!Promise.prototype.match) {
-  Promise.prototype.match = function(...patterns) {
-    return this.then(
-      match(...patterns)
-    );
-  };
+  Object.defineProperty(Promise.prototype, 'match', {
+    value: function(...patterns) {
+      return this.then(
+        match(...patterns)
+      );
+    },
+    enumerable: false
+  });
 }
 
 export { match, gt, lt, op };
