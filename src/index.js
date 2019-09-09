@@ -40,4 +40,18 @@ const gt = (c) => ((n) => n > c);
 const lt = (c) => ((n) => n < c);
 const op = (c) => ((n) => c.includes(n));
 
+// Promise chaining
+if(!Promise.prototype.match) {
+  Object.defineProperty(Promise.prototype, 'match', {
+    value: function(...patterns) {
+      return this.then(
+        match(...patterns)
+      );
+    },
+    enumerable: false,
+    writable: true,
+    configurable: true
+  });
+}
+
 export { match, gt, lt, op };
