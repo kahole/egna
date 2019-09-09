@@ -41,10 +41,12 @@ const lt = (c) => ((n) => n < c);
 const op = (c) => ((n) => c.includes(n));
 
 // Promise chaining
-Promise.prototype.match = function(...patterns) {
-  return this.then(
-    match(...patterns)
-  );
-};
+if(!Promise.prototype.match) {
+  Promise.prototype.match = function(...patterns) {
+    return this.then(
+      match(...patterns)
+    );
+  };
+}
 
 export { match, gt, lt, op };
