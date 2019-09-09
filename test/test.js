@@ -276,4 +276,64 @@ describe('#match()', function () {
     });
   });
 
+
+  describe('Test examples from readme', function () {
+
+    it('Promise example', function () {
+
+      let car = async () => ({ make: 'Toyota', year: 1968 });
+
+      car()
+        .match(
+          { make: 'Subaru'}, () => 'Subaru',
+          
+          { year: lt(1950) }, car => `Super old ${car.make}`,
+
+          { make: 'Toyota' }, ({ year }) => `Toyota from ${year}`,
+
+          _ => 'something else'
+        )
+        .then((msg) => assert.equal('Toyota from 1968', msg));
+    });
+
+    it('Filter example', function () {
+
+      let cars = [{ emissions: 2500 }, { emissions: 60000 }];
+
+      let greenCars = cars.filter(
+        match(
+          { emissions: lt(3000) }, () => true,
+          _ => false
+        )
+      );
+      assert.deepEqual([{ emissions: 2500 }], greenCars);
+    });
+
+    it('Promise example 2', function () {
+
+      let promise = async () => "hello";
+
+      promise()
+        .match(
+          "hello", () => "Hello, world!",
+          _ => "Goodbye"
+        )
+        .then((msg) => assert.equal('Hello, world!', msg));
+    });
+
+    it('Standalone example', function () {
+      let ball = { mass: 5, volume: 10 };
+
+      let throwBall = assert.ok;
+      let density = assert.fail;
+
+      match(
+        { mass: 5 }, throwBall,
+
+        { volume: gt(20) }, ({ mass, volume }) => density(mass, volume)
+        
+      )(ball) // Call match without promise
+    });
+  });
+
 });
