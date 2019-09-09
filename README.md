@@ -40,7 +40,9 @@ match(
 );
 ```
 
-### filter/map/reduce/etc
+----
+
+### Filter/map/reduce/etc
 ```javascript
 import { match, gt } from 'egna';
 
