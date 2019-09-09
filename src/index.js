@@ -48,7 +48,9 @@ if(!Promise.prototype.match) {
         match(...patterns)
       );
     },
-    enumerable: false
+    enumerable: false,
+    writable: true,
+    configurable: true
   });
 }
 
