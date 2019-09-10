@@ -22,9 +22,10 @@ car()
 
     { make: 'Toyota' }, ({ year }) => `Toyota from ${year}`,
 
-    _ => 'something else'
+    _ => {throw 'I dont recognize this car'}
   )
-  .then(console.log);
+  .then(console.log)
+  .catch( (e) => console.log("error: " + e) );
   
 // prints "Toyota from 1968"
 ```
