@@ -92,11 +92,9 @@ let httpPattern =
     'Unknown'
   );
 
-// Use it
-
 const msg = httpPattern(httpObject);
 const msg2 = httpPattern(httpObject2);
-
+// Use it multiple times
 ```
 
 ## Matchlet functions
