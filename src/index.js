@@ -1,14 +1,18 @@
 'use strict';
 
+function useHandler(handler, matchValue) {
+  return typeof handler === 'function' ? handler(matchValue) : handler;
+}
+
 function match(...patterns) {
 
   return obj => {
     for (var i = 0; i < patterns.length - 1; i += 2) {
       if (matchAny(patterns[i], obj))
-        return patterns[i + 1](obj);
+        return useHandler(patterns[i + 1], obj);
     }
     if (patterns.length % 2 === 1)
-      return patterns[patterns.length - 1](obj);
+      return useHandler(patterns[patterns.length - 1], obj);
     return null;
   };
 };
@@ -22,8 +26,7 @@ function matchObject(pat, obj) {
 
 function matchAny(v1, v2) {
 
-  if ((v1 != null && v1.constructor === Object) &&
-    (v2 != null && v2.constructor === Object)) {
+  if (typeof v1 === 'object' && typeof v2 == 'object') {
     return matchObject(v1, v2);
   }
   else if (typeof v1 === 'function') {

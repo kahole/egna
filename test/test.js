@@ -11,7 +11,7 @@ function testPatternWithData({ pattern, data }) {
 
 describe('#match()', function () {
 
-  describe('Match types', function () {
+  describe('Different pattern types', function () {
 
     it('matches number', function () {
       const data = 1;
@@ -80,6 +80,39 @@ describe('#match()', function () {
         { notCorrect: 'object' }, () => false,
         data, () => true,
         _ => false
+      );
+
+      return testPatternWithData({ pattern, data });
+    });
+
+    it('matches array', function () {
+      const data = [1, 2, 3];
+      const pattern = match(
+        [1, 2, 3], () => true,
+        _ => false
+      );
+
+      return testPatternWithData({ pattern, data });
+    });
+  });
+
+  describe('Different handler types', function () {
+
+    it('matches number and invokes static handler', function () {
+      const data = 1;
+      const pattern = match(
+        data, true,
+        false
+      );
+
+      return testPatternWithData({ pattern, data });
+    });
+
+    it('doesnt match number and invokes static any handler', function () {
+      const data = 1;
+      const pattern = match(
+        data+1, false,
+        true
       );
 
       return testPatternWithData({ pattern, data });
