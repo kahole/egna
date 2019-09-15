@@ -88,10 +88,11 @@ let httpPattern =
   match(
     { status: 404 }, 'Not found',
     { status: 200 }, 'Ok',
-    { status: gt(499) }, 'Server error,
+    { status: gt(499) }, 'Server error',
     'Unknown'
   );
 
+// Use it multiple times
 const msg = httpPattern(httpObject);
 const msg2 = httpPattern(httpObject2);
 ```
