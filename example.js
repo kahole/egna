@@ -6,7 +6,7 @@ let car = async () => ({ make: 'Toyota', year: 1968 });
 
 car()
   .match(
-    { make: 'Subaru'}, () => 'Subaru',
+    { make: 'Subaru'}, 'Subaru',
   
     { year: lt(1950) }, car => `Super old ${car.make}`,
 

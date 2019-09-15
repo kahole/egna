@@ -16,7 +16,7 @@ let car = async () => ({ make: 'Toyota', year: 1968 });
 
 car()
   .match(
-    { make: 'Subaru'}, () => 'Subaru',
+    { make: 'Subaru'}, 'Subaru',
   
     { year: lt(1950) }, car => `Super old ${car.make}`,
 
@@ -35,13 +35,15 @@ car()
 match(
   'literal pattern', handlerFunc,
 
-  { my: { object: 'pattern' } }, anotherHandlerFunc,
+  [1, 2, 3], myArrayHandlerFunc,
 
-  _ => 'Single function at the end is the any handler'
+  { my: { object: 'pattern' } }, 'Handlers can be just data also',
+
+  _ => 'Single expression/literal at the end is the any handler'
 );
 ```
 
-----
+## Scenarios
 
 ### Filter/map/reduce/etc
 ```javascript
@@ -51,7 +53,7 @@ let cars = [{ emissions: 2500 }, { emissions: 60000 }];
 
 let greenCars = cars.filter(
   match(
-    { emissions: lt(3000) }, () => true,
+    { emissions: lt(3000) }, true,
     _ => false
   )
 );
@@ -70,26 +72,31 @@ let promise = async () => "hello";
 
 promise()
   .match(
-    "hello", () => "Hello, world!",
+    "hello", "Hello, world!",
     _ => "Goodbye"
   )
   .then(console.log);
 // return value of the matched handler is passed along the promise chain
 ```
 
-### Standalone
-The return value of the matched handler is the return value of the entire expression.
+### Pattern reuse
+A call to match returns function loaded with the patterns and handlers. This function can be stored and used whenever.
 ```javascript
 import { match, gt } from 'egna';
 
-let ball = { mass: 5, volume: 10 };
+let httpPattern =
+  match(
+    { status: 404 }, 'Not found',
+    { status: 200 }, 'Ok',
+    { status: gt(499) }, 'Server error,
+    'Unknown'
+  );
 
-match(
-  { mass: 5 }, throwBall,
+// Use it
 
-  { volume: gt(20) }, ({ mass, volume }) => density(mass, volume)
-  
-)(ball) // Call match without promise
+const msg = httpPattern(httpObject);
+const msg2 = httpPattern(httpObject2);
+
 ```
 
 ## Matchlet functions
